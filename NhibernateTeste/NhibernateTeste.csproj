@@ -61,14 +61,21 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\DataCreator.cs" />
     <Compile Include="Config\HibernateConfig.cs" />
     <Compile Include="Config\LogConfig.cs" />
-    <Compile Include="Entity\UserMap.cs" />
-    <Compile Include="Entity\UserType.cs" />
-    <Compile Include="Entity\UserTypeMap.cs" />
+    <Compile Include="Entity\CustomerMap.cs" />
+    <Compile Include="Entity\CustomerType.cs" />
+    <Compile Include="Entity\CustomerTypeMap.cs" />
+    <Compile Include="Entity\OrderDetails.cs" />
+    <Compile Include="Entity\OrderDetailsMap.cs" />
+    <Compile Include="Entity\Orders.cs" />
+    <Compile Include="Entity\OrdersMap.cs" />
+    <Compile Include="Entity\Product.cs" />
+    <Compile Include="Entity\ProductMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTest1.cs" />
-    <Compile Include="Entity\User.cs" />
+    <Compile Include="Entity\Customer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

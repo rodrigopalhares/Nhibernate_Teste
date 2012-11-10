@@ -33,7 +33,13 @@ namespace NhibernateTeste.Config
 				.Database(MsSqlConfiguration.MsSql2008
 				          	.ConnectionString("Server=PPP-HP;Database=nhibernate;Trusted_Connection=True;")
 				          	.ShowSql())
-				.Mappings(m => m.FluentMappings.Add<UserMap>().Add<UserTypeMap>())
+				.Mappings(m => m.FluentMappings
+				               	.Add<CustomerMap>()
+				               	.Add<CustomerTypeMap>()
+				               	.Add<OrdersMap>()
+				               	.Add<ProductMap>()
+								.Add<OrderDetailsMap>()
+								)
 				.BuildConfiguration();
 
 			new SchemaExport(config).Create(true, true);

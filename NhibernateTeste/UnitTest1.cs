@@ -21,42 +21,50 @@ namespace NhibernateTeste
 	[TestFixture]
 	public class UnitTest1
 	{
-		public UnitTest1()
+
+		[SetUp]
+		public void Setup()
 		{
 			LogConfig.Init();
-
-			var session = HibernateConfig.Factory.OpenSession();
-			var userType = new UserType {Name = "Comprador"};
-			session.Save(new User {Name = "User11", UserType = userType});
-			session.Save(new User {Name = "User12", UserType = userType});
-
-			var userType2 = new UserType {Name = "Comprador2"};
-			userType2.AddUser(new User {Name = "User21"});
-			userType2.AddUser(new User {Name = "User22"});
-			session.Save(userType2);
-
-			session.Flush();
+			DataCreator.RecreateDb();
 		}
 
 		[Test]
-		public void TestMethod1()
+		public void Test1()
 		{
-			var session = HibernateConfig.Factory.OpenSession();
-			var userType = session.QueryOver<UserType>()
-				.Where(n => n.Name == "Comprador")
-				.SingleOrDefault();
+			int orderCode;
+			using (var session = HibernateConfig.Factory.OpenSession())
+			{
+				var product = session.Get<Product>(DataCreator.Products[0]);
+				var product2 = session.Get<Product>(DataCreator.Products[1]);
+				var customer = session.Get<Customer>(DataCreator.Customers[0]);
+				var order = new Orders
+				            	{
+				            		Customer = customer,
+				            	};
+				order.AddProduct(product, 1);
+				order.AddProduct(product2, 2.5);
+				session.Save(order);
+				session.Flush();
+				orderCode = order.Code;
+			}
 
-			Assert.NotNull(userType);
-			Assert.AreEqual("Comprador", userType.Name);
-			Assert.AreEqual(2, userType.Users.Count);
+			using (var session = HibernateConfig.Factory.OpenSession())
+			{
+				var orders = session.Get<Orders>(orderCode);
+				Assert.AreEqual(2, orders.OrderDetails.Count);
 
-			userType = session.QueryOver<UserType>()
-				.Where(n => n.Name == "Comprador2")
-				.SingleOrDefault();
+				var product2 = session.Get<Product>(DataCreator.Products[1]);
+				orders.RemoveProduct(product2);
+				session.Flush();
+				Assert.AreEqual(1, orders.OrderDetails.Count);
+			}
 
-			Assert.NotNull(userType);
-			Assert.AreEqual("Comprador2", userType.Name);
-			Assert.AreEqual(2, userType.Users.Count);
+			using (var session = HibernateConfig.Factory.OpenSession())
+			{
+				var orders = session.Get<Orders>(orderCode);
+				Assert.AreEqual(1, orders.OrderDetails.Count);
+			}
 		}
 	}
 }
