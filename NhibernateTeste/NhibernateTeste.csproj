@@ -73,6 +73,10 @@
     <Compile Include="Entity\OrdersMap.cs" />
     <Compile Include="Entity\Product.cs" />
     <Compile Include="Entity\ProductMap.cs" />
+    <Compile Include="Entity\Service.cs" />
+    <Compile Include="Entity\ServiceMap.cs" />
+    <Compile Include="Entity\ServiceProduct.cs" />
+    <Compile Include="Entity\ServiceProductMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Entity\Customer.cs" />

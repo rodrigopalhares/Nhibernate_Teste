@@ -30,7 +30,44 @@ namespace NhibernateTeste
 		}
 
 		[Test]
-		public void Test1()
+		public void TestManyToMany()
+		{
+			using (var session = HibernateConfig.Factory.OpenSession())
+			{
+				var product = session.Get<Product>(DataCreator.Products[0]);
+				var product2 = session.Get<Product>(DataCreator.Products[1]);
+				var service = session.Get<Service>(DataCreator.Services[0]);
+				var service2 = session.Get<Service>(DataCreator.Services[1]);
+				product.Services.Add(service);
+				service.Products.Add(product);
+				product.Services.Add(service2);
+				service2.Products.Add(product);
+
+				product2.Services.Add(service);
+				service.Products.Add(product2);
+				session.Flush();
+			}
+
+			using (var session = HibernateConfig.Factory.OpenSession())
+			{
+				var product = session.Get<Product>(DataCreator.Products[0]);
+				var product2 = session.Get<Product>(DataCreator.Products[1]);
+				Assert.AreEqual(2, product.Services.Count);
+				Assert.AreEqual(1, product2.Services.Count);
+
+				product.Services.Remove(product.Services.ElementAt(0));
+				session.Flush();
+			}
+
+			using (var session = HibernateConfig.Factory.OpenSession())
+			{
+				var product = session.Get<Product>(DataCreator.Products[0]);
+				Assert.AreEqual(1, product.Services.Count);
+			}
+		}
+
+		[Test]
+		public void TestOneToManyInverse()
 		{
 			int orderCode;
 			using (var session = HibernateConfig.Factory.OpenSession())

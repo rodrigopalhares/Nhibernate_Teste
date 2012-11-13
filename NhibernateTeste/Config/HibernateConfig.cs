@@ -38,7 +38,9 @@ namespace NhibernateTeste.Config
 				               	.Add<CustomerTypeMap>()
 				               	.Add<OrdersMap>()
 				               	.Add<ProductMap>()
+								.Add<ServiceMap>()
 								.Add<OrderDetailsMap>()
+								// .Add<ServiceProductMap>()
 								)
 				.BuildConfiguration();
 

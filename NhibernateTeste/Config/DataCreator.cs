@@ -17,14 +17,18 @@ namespace NhibernateTeste.Config
 
 		public static int[] CustomerTypes { get; set; }
 
+		public static int[] Services { get; set; }
+
 		public static void TruncateDb()
 		{
 			var session = HibernateConfig.Factory.OpenSession();
 
+			session.CreateQuery("delete ServiceProduct").ExecuteUpdate();
 			session.CreateQuery("delete Customer").ExecuteUpdate();
 			session.CreateQuery("delete CustomerType").ExecuteUpdate();
 			session.CreateQuery("delete Product").ExecuteUpdate();
 			session.CreateQuery("delete Orders").ExecuteUpdate();
+			session.CreateQuery("delete Service").ExecuteUpdate();
 
 			session.Flush();
 			session.Close();
@@ -48,18 +52,28 @@ namespace NhibernateTeste.Config
 				session.Save(new Customer { Name = "Customer23", CustomerType = type2 });
 
 				session.Save(new Product
-				{
-					CreateTime = DateTime.Today.AddDays(-2),
-					Name = "Product1",
-					Price = 2.99
-				});
+				             	{
+				             		CreateTime = DateTime.Today.AddDays(-2),
+				             		Name = "Product1",
+				             		Price = 2.99
+				             	});
 
 				session.Save(new Product
-				{
-					CreateTime = DateTime.Today.AddDays(-1),
-					Name = "Product2",
-					Price = 3
-				});
+				             	{
+				             		CreateTime = DateTime.Today.AddDays(-1),
+				             		Name = "Product2",
+				             		Price = 3
+				             	});
+
+				session.Save(new Service
+				             	{
+				             		Name = "Service1"
+				             	});
+
+				session.Save(new Service
+				             	{
+				             		Name = "Service2"
+				             	});
 
 				session.Flush();
 			}
@@ -76,6 +90,7 @@ namespace NhibernateTeste.Config
 				CustomerTypes = session.QueryOver<CustomerType>().OrderBy(c => c.Name).Asc.List().Select(c => c.Code).ToArray();
 				Customers = session.QueryOver<Customer>().OrderBy(c => c.Name).Asc.List().Select(c => c.Code).ToArray();
 				Products = session.QueryOver<Product>().OrderBy(c => c.Name).Asc.List().Select(c => c.Code).ToArray();
+				Services = session.QueryOver<Service>().OrderBy(c => c.Name).Asc.List().Select(c => c.Code).ToArray();
 			}
 		}
 
