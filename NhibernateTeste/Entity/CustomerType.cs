@@ -9,17 +9,17 @@ namespace NhibernateTeste.Entity
 	{
 		public virtual int Code { get; set; }
 		public virtual string Name { get; set; }
-		public virtual ICollection<Customer> Users { get; set; }
+		public virtual ICollection<Customer> Customers { get; set; }
 
 		public CustomerType()
 		{
-			this.Users = new HashSet<Customer>();
+			this.Customers = new HashSet<Customer>();
 		}
 
 		public virtual void AddUser(Customer customer)
 		{
 			customer.CustomerType = this;
-			this.Users.Add(customer);
+			this.Customers.Add(customer);
 		}
 
 		// override object.Equals

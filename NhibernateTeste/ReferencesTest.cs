@@ -19,8 +19,14 @@ namespace NhibernateTeste
 	/// Summary description for UnitTest1
 	/// </summary>
 	[TestFixture]
-	public class UnitTest1
+	public class ReferencesTest
 	{
+
+		[TestFixtureSetUp]
+		public void FixtureSetup()
+		{
+			LogConfig.Init();
+		}
 
 		[SetUp]
 		public void Setup()
@@ -39,12 +45,9 @@ namespace NhibernateTeste
 				var service = session.Get<Service>(DataCreator.Services[0]);
 				var service2 = session.Get<Service>(DataCreator.Services[1]);
 				product.Services.Add(service);
-				service.Products.Add(product);
 				product.Services.Add(service2);
-				service2.Products.Add(product);
 
 				product2.Services.Add(service);
-				service.Products.Add(product2);
 				session.Flush();
 			}
 
@@ -55,7 +58,9 @@ namespace NhibernateTeste
 				Assert.AreEqual(2, product.Services.Count);
 				Assert.AreEqual(1, product2.Services.Count);
 
-				product.Services.Remove(product.Services.ElementAt(0));
+				var service = product.Services.ElementAt(0);
+				product.Services.Remove(service);
+
 				session.Flush();
 			}
 

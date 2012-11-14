@@ -12,7 +12,7 @@ namespace NhibernateTeste.Entity
 		{
 			Id(c => c.Code).GeneratedBy.Identity().Length(10);
 			Map(c => c.Name).Not.Nullable().Length(50);
-			HasManyToMany(c => c.Products).Table("ServiceProduct").Cascade.AllDeleteOrphan().AsSet();
+			HasManyToMany(c => c.Products).Table("ServiceProduct").Cascade.None().AsSet();
 		}
 	}
 }

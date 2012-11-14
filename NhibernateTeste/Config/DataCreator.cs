@@ -21,17 +21,20 @@ namespace NhibernateTeste.Config
 
 		public static void TruncateDb()
 		{
-			var session = HibernateConfig.Factory.OpenSession();
-
-			session.CreateQuery("delete ServiceProduct").ExecuteUpdate();
-			session.CreateQuery("delete Customer").ExecuteUpdate();
-			session.CreateQuery("delete CustomerType").ExecuteUpdate();
-			session.CreateQuery("delete Product").ExecuteUpdate();
-			session.CreateQuery("delete Orders").ExecuteUpdate();
-			session.CreateQuery("delete Service").ExecuteUpdate();
-
-			session.Flush();
-			session.Close();
+			using (var session = HibernateConfig.Factory.OpenSession())
+			{
+				using (var tx = session.BeginTransaction())
+				{
+					session.QueryOver<Orders>().List().ForEach(session.Delete);
+					session.QueryOver<Customer>().List().ForEach(session.Delete);
+					session.QueryOver<Product>().List().ForEach(session.Delete);
+					session.QueryOver<Service>().List().ForEach(session.Delete);
+					tx.Commit();
+				}
+				// Quando colocado dentro da transacao ocorre um erro. O hibernate tenta atualizar os customers setando os types para null.
+				session.QueryOver<CustomerType>().List().ForEach(session.Delete);
+				session.Flush();
+			}
 		}
 
 		public static void RecreateDb()
@@ -116,7 +119,7 @@ namespace NhibernateTeste.Config
 
 				Assert.NotNull(customerType, "CustomerType nao encontrado");
 				Assert.AreEqual(name, customerType.Name, "Name diferente");
-				Assert.AreEqual(customerCount, customerType.Users.Count, "Quantidade de customer diferente");
+				Assert.AreEqual(customerCount, customerType.Customers.Count, "Quantidade de customer diferente");
 			}
 		}
 

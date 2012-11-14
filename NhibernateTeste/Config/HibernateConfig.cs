@@ -44,7 +44,9 @@ namespace NhibernateTeste.Config
 								)
 				.BuildConfiguration();
 
-			new SchemaExport(config).Create(true, true);
+			var schema = new SchemaExport(config);
+			schema.Drop(true, true);
+			schema.Create(true, true);
 
 			factory = config.BuildSessionFactory();
 		}

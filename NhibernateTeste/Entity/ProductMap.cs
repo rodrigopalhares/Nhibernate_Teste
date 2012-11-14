@@ -14,7 +14,7 @@ namespace NhibernateTeste.Entity
 			Map(c => c.CreateTime).Not.Nullable();
 			Map(c => c.Name).Not.Nullable().Length(50);
 			Map(c => c.Price).Not.Nullable().Length(10).Precision(2).Default("0");
-			HasManyToMany(c => c.Services).Table("ServiceProduct").Cascade.AllDeleteOrphan().AsSet();
+			HasManyToMany(c => c.Services).Table("ServiceProduct").Cascade.All().AsSet();
 		}
 	}
 }
